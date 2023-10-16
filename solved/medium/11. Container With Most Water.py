@@ -1,0 +1,56 @@
+# https://leetcode.com/problems/container-with-most-water/
+"""
+You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+
+Find two lines that together with the x-axis form a container, such that the container contains the most water.
+
+Return the maximum amount of water a container can store.
+
+Notice that you may not slant the container.
+"""
+# GO
+func maxArea(height []int) int {
+    beg := 0
+    end := len(height) - 1
+    ans := 0
+    for beg < end {
+		h := min(height[beg], height[end])
+		area := h * (end - beg)
+		ans = max(ans, area)
+
+		if height[beg] < height[end] {
+			beg++
+		} else {
+			end--
+		}
+	}
+    return ans
+}
+
+func min(a, b int) int {
+    if a < b {
+        return a
+    }
+    return b
+}
+
+func max(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
+}
+
+# Python
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        beg, end = 0, len(height)-1
+        ans = 0
+        while beg < end:
+            ans = max(ans, abs(min(height[end], height[beg])*(end-beg)))
+            if height[beg] < height[end]:
+                beg += 1
+            else:
+                end -= 1
+        return ans
+
