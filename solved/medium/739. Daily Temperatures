@@ -1,0 +1,47 @@
+"""
+Given an array of integers temperatures represents the daily temperatures, return an array answer such that answer[i] is
+ the number of days you have to wait after the ith day to get a warmer temperature. If there is no future day for which
+ this is possible, keep answer[i] == 0 instead.
+
+ Example 1:
+
+Input: temperatures = [73,74,75,71,69,72,76,73]
+Output: [1,1,4,2,1,1,0,0]
+Example 2:
+
+Input: temperatures = [30,40,50,60]
+Output: [1,1,1,0]
+"""
+Python
+
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        temp_list = [(0, temperatures[0])]
+        ans = [0]*len(temperatures)
+        for i in range(1, len(temperatures)):
+            while temp_list and temp_list[-1][1] < temperatures[i]:
+                popped_i, _ = temp_list.pop()
+                ans[popped_i] = i-popped_i
+            temp_list.append((i, temperatures[i]))
+        return ans
+
+Go
+func dailyTemperatures(temperatures []int) []int {
+     var tempStack []struct {
+        index int
+        temp  int
+    }
+    ans := make([]int, len(temperatures))
+    for i, t := range temperatures {
+        for len(tempStack) > 0 && tempStack[len(tempStack)-1].temp < t {
+            popped := tempStack[len(tempStack)-1]
+            tempStack = tempStack[:len(tempStack)-1]
+            ans[popped.index] = i - popped.index
+        }
+        tempStack = append(tempStack, struct{
+            index int
+            temp  int
+        }{i, t})
+    }
+    return ans
+}
